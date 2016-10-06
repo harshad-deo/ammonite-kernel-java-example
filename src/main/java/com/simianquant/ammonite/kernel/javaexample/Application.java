@@ -1,7 +1,9 @@
 package com.simianquant.ammonite.kernel.javaexample;
 
 import ammonite.kernel.compat.ReplKernelCompat;
+import ammonite.kernel.compat.AutocompleteOutputCompat;
 import coursier.maven.MavenRepository;
+import java.util.List;
 
 final class Application{
 
@@ -23,10 +25,26 @@ final class Application{
 		println("--------------------------------------------------------------------------------");
 	}
 
+	private static String mkString(List<String> inp){
+		final StringBuilder builder = new StringBuilder();
+		for(String s: inp){
+			builder.append(s + ", ");
+		}
+		return builder.toString();
+	}
+
 	private static void process(String text){
 		printRowMarker();
 		println("Processing: " + text);
 		kernel.process(text, null, processor);
+	}
+
+	private static void processComplete(String text){
+		printRowMarker();
+		println("Autocomplete for: " + text);
+		final AutocompleteOutputCompat output = kernel.complete(text, text.length());
+		println("Names: " + mkString(output.names()));
+		println("Signatures: " + mkString(output.signatures()));
 	}
 
 	private static void processBkp(String text){
@@ -58,6 +76,10 @@ final class Application{
 
 		// use the function
 		process(greetString);
+
+		// Autocomplete
+		processComplete("import collection.immutable.Li");
+		processComplete("gre");
 
 		// no static leakage
 		processBkp(greetString + " // should fail, because in different instance");
