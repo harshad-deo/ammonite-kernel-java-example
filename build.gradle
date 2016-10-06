@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	compile 'com.simianquant:ammonite-kernel_2.11:0.2.1'
+}
+
+mainClassName = "com.simianquant.ammonite.kernel.javaexample.Application"
